@@ -190,9 +190,10 @@ def utility_processor():
         total_seconds = (end_time - start_time).total_seconds()
         return readable_time(total_seconds)
 
-    def readable_time(total_seconds):
+    def readable_time(total_seconds: datetime.timedelta):
         if not total_seconds:
             return '-'
+        total_seconds = total_seconds.seconds if hasattr(total_seconds, 'seconds') else total_seconds
         if total_seconds < 60:
             return '%s s' % total_seconds
         if total_seconds < 3600:
