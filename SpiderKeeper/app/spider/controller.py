@@ -193,6 +193,7 @@ def utility_processor():
     def readable_time(total_seconds):
         if not total_seconds:
             return '-'
+        total_seconds = total_seconds.seconds if hasattr(total_seconds, 'seconds') else total_seconds
         if total_seconds < 60:
             return '%s s' % total_seconds
         if total_seconds < 3600:
