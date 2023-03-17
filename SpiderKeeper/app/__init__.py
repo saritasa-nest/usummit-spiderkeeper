@@ -33,8 +33,7 @@ app.logger.addHandler(handler)
 
 # Define the database object which is imported
 # by modules and controllers
-db = SQLAlchemy(app, session_options=dict(autocommit=False, autoflush=True))
-migrate = Migrate(app, db)
+db = SQLAlchemy(None, session_options=dict(autocommit=False, autoflush=True))
 
 @app.teardown_request
 def teardown_request(exception):
@@ -45,16 +44,6 @@ def teardown_request(exception):
 
 # Define apscheduler
 scheduler = BackgroundScheduler()
-
-
-class Base(db.Model):
-    __abstract__ = True
-
-    id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
-                              onupdate=db.func.current_timestamp())
-
 
 # Sample HTTP error handling
 # @app.errorhandler(404)
@@ -81,6 +70,8 @@ from SpiderKeeper.app.spider.model import *
 
 
 def init_database():
+    db.init_app(app)
+    Migrate(app, db)
     with app.app_context():
         db.create_all()
 
@@ -125,3 +116,4 @@ def initialize():
     init_database()
     regist_server()
     start_scheduler()
+    init_basic_auth()
