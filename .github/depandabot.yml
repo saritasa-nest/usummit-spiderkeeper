@@ -1,0 +1,14 @@
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    # Look for `poetry.lock` in the `root` directory
+    directory: "/"
+    # Check for updates once a month.
+    schedule:
+      interval: "monthly"
+    # Limit how many not merged PRs with updates may be opened in the same time
+    open-pull-requests-limit: 3
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
