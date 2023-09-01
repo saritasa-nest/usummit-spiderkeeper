@@ -9,7 +9,6 @@ from flask_basicauth import BasicAuth
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException
-from flask_sslify import SSLify
 
 import SpiderKeeper
 from SpiderKeeper import config
@@ -19,8 +18,6 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 # Configurations
 app.config.from_object(config)
-# enable redirect from http to https
-sslify = SSLify(app)
 
 # Logging
 log = logging.getLogger('werkzeug')

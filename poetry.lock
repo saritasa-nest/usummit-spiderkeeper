@@ -280,19 +280,6 @@ flask = ">=2.2.5"
 sqlalchemy = ">=1.4.18"
 
 [[package]]
-name = "flask-sslify"
-version = "0.1.5"
-description = "Force SSL on your Flask app."
-optional = false
-python-versions = "*"
-files = [
-    {file = "Flask-SSLify-0.1.5.tar.gz", hash = "sha256:d33e1d3c09cd95154176aa8a7319418e52129fc482dd56d8a8ad7c24500d543e"},
-]
-
-[package.dependencies]
-Flask = "*"
-
-[[package]]
 name = "greenlet"
 version = "2.0.2"
 description = "Lightweight in-process concurrent programming"
@@ -739,4 +726,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "322af56fbc73cc6dcac02f50eef32b94678408b98057f233b8037cf042a92c06"
+content-hash = "265cc46cf605f9dc82edfd7dc7b4f9986f5010b375a7484118ec44c38fe93254"
