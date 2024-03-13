@@ -164,8 +164,13 @@ def inject_project():
         session['project_id'] = project.id
     if session.get('project_id'):
         project_context['project'] = Project.find_project_by_id(session['project_id'])
-        project_context['spider_list'] = [spider_instance.to_dict() for spider_instance in
-                                          SpiderInstance.query.filter_by(project_id=session['project_id']).all()]
+        spiders = (
+            SpiderInstance.query
+            .filter_by(project_id=session['project_id'])
+            .order_by(SpiderInstance.spider_name)
+            .all()
+        )
+        project_context['spider_list'] = [spider_instance.to_dict() for spider_instance in spiders]
     else:
         project_context['project'] = {}
     return project_context
