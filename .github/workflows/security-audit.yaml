@@ -1,0 +1,53 @@
+---
+name: checking secrets and vulnerabilities
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - '*'
+
+jobs:
+  secret-checks:
+    name: secret-checks
+    runs-on: ubuntu-latest
+    # Disable check for dependabot PRs as dependabot doesn't have access to
+    # repo's secrets and, thus, can not access `secrets.GITLEAKS_LICENSE`
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{github.head_ref}}
+      - name: secret checks
+        uses: saritasa-nest/saritasa-github-actions/.github/actions/security-audit@v3.8
+        with:
+          enable-trivy-check: true
+          enable-gitleaks-check: true
+          enable-pr-comment: false
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          # https://keys.saritasa.cloud/cred/detail/c6nP9FFoXhtxEjKJADwsYQ/
+          gitleaks-license: ${{secrets.GITLEAKS_LICENSE}}
+          # https://api.slack.com/apps/A02F9HK5W21/incoming-webhooks
+          # channel: team-devops-expose-secrets
+          gitleaks-slack-webhook: ${{secrets.GITLEAKS_SLACK_WEBHOOK_URL}}
+  vulnerability-checks:
+    name: vulnerability-checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{github.head_ref}}
+      - name: vulnerability checks
+        uses: saritasa-nest/saritasa-github-actions/.github/actions/security-audit@v3.8
+        with:
+          enable-vulnerability-checks: true
+          enable-pr-comment: false
+          github-token: ${{secrets.GITHUB_TOKEN}}
