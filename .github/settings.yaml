@@ -1,0 +1,31 @@
+repository:
+  description: Admin Ui For Scrapy/Open Source Scrapinghub
+  default_branch: main
+
+# You can find all possible rules and their parameters
+# in Body parameters -> Rules toggle in this doc:
+# https://docs.github.com/en/rest/repos/rules?apiVersion=2022-11-28#create-a-repository-ruleset
+rulesets:
+  - name: branch-protection
+    branches:
+      - main
+    rules:
+      # Prevent users with push access from force pushing
+      - type: non_fast_forward
+      # Protect branch from deletion
+      - type: deletion
+
+  # Ruleset that add Copilot to PRs to develop branch.
+  # Implemented as separate Ruleset because it requires forbid of direct pushes
+  # to main branch, so this rule could be bypassed by whole Saritasa team
+  - name: add-copilot-to-prs
+    branches:
+      - main
+    bypass_actors:
+      - actor_id: 6321733
+        actor_type: Team
+        bypass_mode: always
+    rules:
+      - type: pull_request
+        parameters:
+          automatic_copilot_code_review_enabled: true
