@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
           ref: ${{github.head_ref}}
       - name: secret checks
-        uses: saritasa-nest/saritasa-github-actions/.github/actions/security-audit@v4.5
+        uses: saritasa-nest/saritasa-github-actions/.github/actions/security-audit@v4.8
         with:
           enable-trivy-check: true
           enable-gitleaks-check: true
@@ -46,7 +46,7 @@ jobs:
           fetch-depth: 0
           ref: ${{github.head_ref}}
       - name: vulnerability checks
-        uses: saritasa-nest/saritasa-github-actions/.github/actions/security-audit@v4.5
+        uses: saritasa-nest/saritasa-github-actions/.github/actions/security-audit@v4.8
         with:
           enable-vulnerability-checks: true
           enable-pr-comment: false
