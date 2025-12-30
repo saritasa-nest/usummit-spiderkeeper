@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "SpiderKeeper"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.14"
 alembic = "^1.16.5"
 aniso8601 = "^10.0.1"
 APScheduler = "^3.11.1"
@@ -28,7 +28,7 @@ requests = "^2.32.5"
 six = "^1.17.0"
 SQLAlchemy = "^2.0.44"
 tzlocal = "^5.3"
-Werkzeug = "^3.1.3"
+Werkzeug = "^3.1.4"
 
 
 [build-system]
