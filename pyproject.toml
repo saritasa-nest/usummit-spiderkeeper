@@ -8,10 +8,10 @@ packages = [{include = "SpiderKeeper"}]
 
 [tool.poetry.dependencies]
 python = "^3.14"
-alembic = "^1.16.5"
+alembic = "^1.17.2"
 aniso8601 = "^10.0.1"
-APScheduler = "^3.11.1"
-click = "^8.1.8"
+APScheduler = "^3.11.2"
+click = "^8.3.1"
 Flask = "^3.1.2"
 Flask-BasicAuth = "^0.2.0"
 Flask-Migrate = "^4.1.0"
@@ -26,7 +26,7 @@ python-editor = "^1.0.4"
 pytz = "^2025.2"
 requests = "^2.32.5"
 six = "^1.17.0"
-SQLAlchemy = "^2.0.44"
+SQLAlchemy = "^2.0.45"
 tzlocal = "^5.3"
 Werkzeug = "^3.1.4"
 
