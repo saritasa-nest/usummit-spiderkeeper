@@ -744,7 +744,8 @@ version = "2025.3"
 description = "Provider of IANA time zone data"
 optional = false
 python-versions = ">=2"
-groups = ["main", "dev"]
+groups = ["main"]
+markers = "platform_system == \"Windows\""
 files = [
     {file = "tzdata-2025.3-py2.py3-none-any.whl", hash = "sha256:06a47e5700f3081aab02b2e513160914ff0694bce9947d6b76ebd6bf57cfc5d1"},
     {file = "tzdata-2025.3.tar.gz", hash = "sha256:de39c2ca5dc7b0344f2eba86f49d614019d29f060fc4ebc8a417896a620b56a7"},
@@ -770,14 +771,14 @@ devenv = ["check-manifest", "pytest (>=4.3)", "pytest-cov", "pytest-mock (>=3.3)
 
 [[package]]
 name = "urllib3"
-version = "2.6.2"
+version = "2.6.3"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "urllib3-2.6.2-py3-none-any.whl", hash = "sha256:ec21cddfe7724fc7cb4ba4bea7aa8e2ef36f607a4bab81aa6ce42a13dc3f03dd"},
-    {file = "urllib3-2.6.2.tar.gz", hash = "sha256:016f9c98bb7e98085cb2b4b17b87d2c702975664e4f060c6532e64d1c1a5e797"},
+    {file = "urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4"},
+    {file = "urllib3-2.6.3.tar.gz", hash = "sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed"},
 ]
 
 [package.extras]
@@ -788,14 +789,14 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 
 [[package]]
 name = "werkzeug"
-version = "3.1.4"
+version = "3.1.5"
 description = "The comprehensive WSGI web application library."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "werkzeug-3.1.4-py3-none-any.whl", hash = "sha256:2ad50fb9ed09cc3af22c54698351027ace879a0b60a3b5edf5730b2f7d876905"},
-    {file = "werkzeug-3.1.4.tar.gz", hash = "sha256:cd3cd98b1b92dc3b7b3995038826c68097dcb16f9baa63abe35f20eafeb9fe5e"},
+    {file = "werkzeug-3.1.5-py3-none-any.whl", hash = "sha256:5111e36e91086ece91f93268bb39b4a35c1e6f1feac762c9c822ded0a4e322dc"},
+    {file = "werkzeug-3.1.5.tar.gz", hash = "sha256:6a548b0e88955dd07ccb25539d7d0cc97417ee9e179677d22c7041c8f078ce67"},
 ]
 
 [package.dependencies]
@@ -807,4 +808,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.14"
-content-hash = "52fd9262d5008bc3572a24e002727da1d3272feac9948ab537b17f4279fb4f9e"
+content-hash = "ff0cd9111a1a620b25ed0e34d963ae6139507b109071a18e34b58285134fe4a6"
