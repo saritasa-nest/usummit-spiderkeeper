@@ -15,7 +15,7 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 
-from SpiderKeeper.app import db, agent, app
+from SpiderKeeper.app import db, agent, app, config
 from SpiderKeeper.app.spider.model import JobInstance, Project, JobExecution, SpiderInstance, JobRunType
 
 api_spider_bp = Blueprint('spider', __name__)
@@ -248,7 +248,11 @@ def project_manage():
 
 @app.route("/project/<project_id>/job/dashboard")
 def job_dashboard(project_id):
-    return render_template("job_dashboard.html", job_status=JobExecution.list_jobs(project_id))
+    return render_template(
+        "job_dashboard.html",
+        job_status=JobExecution.list_jobs(project_id),
+        scrapyd_url=config.SERVERS[0],
+    )
 
 
 @app.route("/job/<job_execution_id>/detail")

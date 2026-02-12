@@ -269,3 +269,48 @@
 </div>
 <!-- /.modal -->
 {% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function() {
+        const selectSpiderElement = document.getElementsByName("spider_name")[0];
+        const spiderArgumentsInput = document.getElementsByName("spider_arguments")[0];
+
+        // When the modal is open, try to get the `index_url`
+        // for the spider that is set by default in this modal.
+        $("#job-run-modal").on("shown.bs.modal", function () {
+            setSpiderIndexUrl(selectSpiderElement.value);
+        });
+
+        // When we choose a spider, try to get the `index_url` for this spider.
+        selectSpiderElement.addEventListener("change", (event) => {
+            setSpiderIndexUrl(event.target.value);
+        });
+
+        function setSpiderIndexUrl(spiderName) {
+            $.ajax({
+                url: "{{ scrapyd_url }}/getindexurl.json",
+                method: "get",
+                data: {
+                    project: "{{ project.project_name }}",
+                    spider: spiderName,
+                },
+                dataType: "json",
+                success: function(data) {
+                    var indexUrl = "";
+                    if (typeof data == "object" && data !== null) {
+                        indexUrl = data.index_url
+                    }
+                    if (indexUrl && indexUrl !== "") {
+                        spiderArgumentsInput.value = "index_url=" + indexUrl;
+                    } else {
+                        spiderArgumentsInput.value = "";
+                    }
+                },
+                error: function() {
+                    spiderArgumentsInput.value = "";
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
