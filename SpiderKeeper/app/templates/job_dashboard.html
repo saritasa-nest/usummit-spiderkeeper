@@ -229,7 +229,7 @@
                         <label>Spider</label>
                         <select class="form-control" name="spider_name">
                             {% for spider in spider_list %}
-                            <option value="{{ spider.spider_name }}">{{ spider.spider_name }}</option>
+                            <option value="{{ spider.spider_name }}" data-arguments-string="{{ spider.arguments_string or '' }}">{{ spider.spider_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -268,4 +268,7 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+{% endblock %}
+{% block script %}
+    <script src="{{ url_for('static', filename='js/pages/job-run-modal.js') }}"></script>
 {% endblock %}

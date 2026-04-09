@@ -35,13 +35,42 @@ class ScrapydProxy(SpiderServiceProxy):
         return True if data and data['status'] == 'ok' else False
 
     def get_spider_list(self, project_name):
-        data = request("get", self._scrapyd_url() + "/listspiders.json?project=%s" % project_name,
-                       return_type="json")
+        """Get spider list with their arguments.
+        
+        It's required to use adjusted `scrapyd` with `list_spiders_with_arguments.json` endpoint
+        which returns spiders with their arguments. For each spider response data should be like:
+
+            ```
+            {
+                "name": "spider_name",
+                "arguments": [
+                    {
+                        "name": "argument_name",
+                        "default_value": "argument_default_value"
+                    },
+                    ...
+                ]
+            }
+            ```
+        
+        """
+        data = request(
+            "get",
+            f"{self._scrapyd_url()}/list_spiders_with_arguments.json",
+            params={"project": project_name},
+            return_type="json",
+        )
         result = []
-        if data and data['status'] == 'ok':
-            for spider_name in data['spiders']:
+        if data and data["status"] == "ok":
+            for spider in data["spiders"]:
                 spider_instance = SpiderInstance()
-                spider_instance.spider_name = spider_name
+                spider_instance.spider_name = spider["name"]
+                arguments_list = []
+                for argument in spider["arguments"]:
+                    if argument["default_value"]:
+                        arguments_string = f"{argument["name"]}={argument["default_value"]}"
+                        arguments_list.append(arguments_string)
+                spider_instance.arguments_string = ",".join(arguments_list)
                 result.append(spider_instance)
         return result
 
@@ -49,8 +78,12 @@ class ScrapydProxy(SpiderServiceProxy):
         pass
 
     def get_job_list(self, project_name, spider_status=None):
-        data = request("get", self._scrapyd_url() + "/listjobs.json?project=%s" % project_name,
-                       return_type="json")
+        data = request(
+            "get", 
+            f"{self._scrapyd_url()}/listjobs.json",
+            params={"project": project_name},
+            return_type="json",
+        )
         result = {SpiderStatus.PENDING: [], SpiderStatus.RUNNING: [], SpiderStatus.FINISHED: []}
         if data and data['status'] == 'ok':
             for _status in self.spider_status_name_dict.keys():
