@@ -41,6 +41,7 @@ class SpiderInstance(Base):
 
     spider_name = db.Column(db.String(100))
     project_id = db.Column(db.INTEGER, nullable=False, index=True)
+    arguments_string = db.Column(db.Text, nullable=True)
 
     @classmethod
     def update_spider_instances(cls, project_id, spider_instance_list):
@@ -50,6 +51,8 @@ class SpiderInstance(Base):
                                                           spider_name=spider_instance.spider_name).first()
             if not existed_spider_instance:
                 db.session.add(spider_instance)
+            else:
+                existed_spider_instance.arguments_string = spider_instance.arguments_string
 
         for spider in cls.query.filter_by(project_id=project.id).all():
             existed_spider = any(
@@ -68,7 +71,8 @@ class SpiderInstance(Base):
     def to_dict(self):
         return dict(spider_instance_id=self.id,
                     spider_name=self.spider_name,
-                    project_id=self.project_id)
+                    project_id=self.project_id,
+                    arguments_string=self.arguments_string)
 
     @classmethod
     def list_spiders(cls, project_id):

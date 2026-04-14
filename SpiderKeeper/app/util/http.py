@@ -3,15 +3,16 @@ import logging
 import requests
 
 
-def request_get(url, retry_times=5):
+def request_get(url, retry_times=5, params=None):
     '''
     :param url:
     :param retry_times:
+    :param params: dictionary of query parameters
     :return: response obj
     '''
     for i in range(retry_times):
         try:
-            res = requests.get(url)
+            res = requests.get(url, params=params)
         except Exception as e:
             logging.warning('request error retry %s' % url)
             continue
@@ -33,7 +34,7 @@ def request_post(url, data, retry_times=5):
         return res
 
 
-def request(request_type, url, data=None, retry_times=5, return_type="text"):
+def request(request_type, url, data=None, retry_times=5, return_type="text", params=None):
     '''
 
     :param request_type: get/post
@@ -41,10 +42,11 @@ def request(request_type, url, data=None, retry_times=5, return_type="text"):
     :param data:
     :param retry_times:
     :param return_type: text/json
+    :param params: dictionary of query parameters
     :return:
     '''
     if request_type == 'get':
-        res = request_get(url, retry_times)
+        res = request_get(url, retry_times, params=params)
     if request_type == 'post':
         res = request_post(url, data, retry_times)
     if not res: return res

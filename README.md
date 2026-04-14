@@ -15,7 +15,33 @@ A scalable admin ui for spider service
 
 
 Current Support spider service
-- [Scrapy](https://github.com/scrapy/scrapy) ( with [scrapyd](https://github.com/scrapy/scrapyd))
+- [Scrapy](https://github.com/scrapy/scrapy) (with [scrapyd](https://github.com/scrapy/scrapyd))
+
+---
+
+**Important**: it is required to use adjusted `scrapyd` with `list_spiders_with_arguments.json` endpoint which returns spiders with their arguments.
+
+Required response format example:
+
+```json
+{
+    "spiders": [
+        {
+            "name": "spider_name",
+            "arguments": [
+                {
+                    "name": "argument_name",
+                    "default_value": "argument_default_value",
+                },
+                ...
+            ]
+        }
+        ...
+    ]
+}
+```
+
+---
 
 ## Screenshot
 ![job dashboard](https://raw.githubusercontent.com/DormyMo/SpiderKeeper/master/screenshot/screenshot_1.png)
