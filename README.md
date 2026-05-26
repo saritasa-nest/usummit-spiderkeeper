@@ -19,15 +19,15 @@ Current Support spider service
 
 ---
 
-**Important**: it is required to use adjusted `scrapyd` with `list_spiders_with_arguments.json` endpoint which returns spiders with their arguments.
+**Important**: it is required to use adjusted `scrapyd` with `list_grabbers_with_arguments.json` endpoint which returns grabbers with their arguments.
 
 Required response format example:
 
 ```json
 {
-    "spiders": [
+    "grabbers": [
         {
-            "name": "spider_name",
+            "name": "grabber_name",
             "arguments": [
                 {
                     "name": "argument_name",
