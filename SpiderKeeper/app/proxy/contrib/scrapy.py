@@ -37,12 +37,12 @@ class ScrapydProxy(SpiderServiceProxy):
     def get_spider_list(self, project_name):
         """Get spider list with their arguments.
         
-        It's required to use adjusted `scrapyd` with `list_spiders_with_arguments.json` endpoint
-        which returns spiders with their arguments. For each spider response data should be like:
+        It's required to use adjusted `scrapyd` with `list_grabbers_with_arguments.json` endpoint
+        which returns grabbers with their arguments. For each grabber response data should be like:
 
             ```
             {
-                "name": "spider_name",
+                "name": "grabber_name",
                 "arguments": [
                     {
                         "name": "argument_name",
@@ -56,7 +56,7 @@ class ScrapydProxy(SpiderServiceProxy):
         """
         data = request(
             "get",
-            f"{self._scrapyd_url()}/list_spiders_with_arguments.json",
+            f"{self._scrapyd_url()}/list_grabbers_with_arguments.json",
             params={"project": project_name},
             return_type="json",
         )
