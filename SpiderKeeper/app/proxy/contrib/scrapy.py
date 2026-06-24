@@ -62,7 +62,7 @@ class ScrapydProxy(SpiderServiceProxy):
         )
         result = []
         if data and data["status"] == "ok":
-            for spider in data["spiders"]:
+            for spider in data["grabbers"]:
                 spider_instance = SpiderInstance()
                 spider_instance.spider_name = spider["name"]
                 arguments_list = []
