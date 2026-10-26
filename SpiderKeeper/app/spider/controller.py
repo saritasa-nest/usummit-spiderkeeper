@@ -163,10 +163,12 @@ def inject_project():
         project = Project.query.first()
         session['project_id'] = project.id
     if session.get('project_id'):
-        project_context['project'] = Project.find_project_by_id(session['project_id'])
+        # Sessions created before <int:project_id> routes may hold a str
+        project_id = int(session['project_id'])
+        project_context['project'] = Project.find_project_by_id(project_id)
         spiders = (
             SpiderInstance.query
-            .filter_by(project_id=session['project_id'])
+            .filter_by(project_id=project_id)
             .order_by(SpiderInstance.spider_name)
             .all()
         )
@@ -216,7 +218,7 @@ def index():
     return redirect("/project/manage", code=302)
 
 
-@app.route("/project/<project_id>")
+@app.route("/project/<int:project_id>")
 def project_index(project_id):
     session['project_id'] = project_id
     return redirect("/project/%s/job/dashboard" % project_id, code=302)
@@ -232,7 +234,7 @@ def project_create():
     return redirect("/project/%s/spider/deploy" % project.id, code=302)
 
 
-@app.route("/project/<project_id>/delete")
+@app.route("/project/<int:project_id>/delete")
 def project_delete(project_id):
     project = Project.find_project_by_id(project_id)
     agent.delete_project(project)
@@ -246,12 +248,12 @@ def project_manage():
     return render_template("project_manage.html")
 
 
-@app.route("/project/<project_id>/job/dashboard")
+@app.route("/project/<int:project_id>/job/dashboard")
 def job_dashboard(project_id):
     return render_template("job_dashboard.html", job_status=JobExecution.list_jobs(project_id))
 
 
-@app.route("/job/<job_execution_id>/detail")
+@app.route("/job/<int:job_execution_id>/detail")
 def job_detail(job_execution_id):
     job_execution = JobExecution.query.filter_by(id=job_execution_id).first()
     job_instance = JobInstance.find_job_instance_by_id(job_execution.job_instance_id) \
@@ -263,7 +265,7 @@ def job_detail(job_execution_id):
     )
 
 
-@app.route("/project/<project_id>/job/periodic")
+@app.route("/project/<int:project_id>/job/periodic")
 def job_periodic(project_id):
     project = Project.find_project_by_id(project_id)
     job_instance_list = [job_instance.to_dict() for job_instance in
@@ -272,7 +274,7 @@ def job_periodic(project_id):
                            job_instance_list=job_instance_list)
 
 
-@app.route("/project/<project_id>/job/add", methods=['post'])
+@app.route("/project/<int:project_id>/job/add", methods=['post'])
 def job_add(project_id):
     project = Project.find_project_by_id(project_id)
     job_instance = JobInstance()
@@ -308,14 +310,14 @@ def job_add(project_id):
     return redirect(request.referrer, code=302)
 
 
-@app.route("/project/<project_id>/jobexecs/<job_exec_id>/stop")
+@app.route("/project/<int:project_id>/jobexecs/<int:job_exec_id>/stop")
 def job_stop(project_id, job_exec_id):
     job_execution = JobExecution.query.filter_by(project_id=project_id, id=job_exec_id).first()
     agent.cancel_spider(job_execution)
     return redirect(request.referrer, code=302)
 
 
-@app.route("/project/<project_id>/jobexecs/<job_exec_id>/log")
+@app.route("/project/<int:project_id>/jobexecs/<int:job_exec_id>/log")
 def job_log(project_id, job_exec_id):
     job_execution = JobExecution.query.filter_by(project_id=project_id, id=job_exec_id).first()
     res = requests.get(agent.log_url(job_execution))
@@ -324,14 +326,14 @@ def job_log(project_id, job_exec_id):
     return render_template("job_log.html", log_lines=raw.split('\n'))
 
 
-@app.route("/project/<project_id>/job/<job_instance_id>/run")
+@app.route("/project/<int:project_id>/job/<int:job_instance_id>/run")
 def job_run(project_id, job_instance_id):
     job_instance = JobInstance.query.filter_by(project_id=project_id, id=job_instance_id).first()
     agent.start_spider(job_instance)
     return redirect(request.referrer, code=302)
 
 
-@app.route("/project/<project_id>/job/<job_instance_id>/remove")
+@app.route("/project/<int:project_id>/job/<int:job_instance_id>/remove")
 def job_remove(project_id, job_instance_id):
     job_instance = JobInstance.query.filter_by(project_id=project_id, id=job_instance_id).first()
     db.session.delete(job_instance)
@@ -339,7 +341,7 @@ def job_remove(project_id, job_instance_id):
     return redirect(request.referrer, code=302)
 
 
-@app.route("/project/<project_id>/job/<job_instance_id>/switch")
+@app.route("/project/<int:project_id>/job/<int:job_instance_id>/switch")
 def job_switch(project_id, job_instance_id):
     job_instance = JobInstance.query.filter_by(project_id=project_id, id=job_instance_id).first()
     job_instance.enabled = -1 if job_instance.enabled == 0 else 0
@@ -347,20 +349,20 @@ def job_switch(project_id, job_instance_id):
     return redirect(request.referrer, code=302)
 
 
-@app.route("/project/<project_id>/spider/dashboard")
+@app.route("/project/<int:project_id>/spider/dashboard")
 def spider_dashboard(project_id):
     spider_instance_list = SpiderInstance.list_spiders(project_id)
     return render_template("spider_dashboard.html",
                            spider_instance_list=spider_instance_list)
 
 
-@app.route("/project/<project_id>/spider/deploy")
+@app.route("/project/<int:project_id>/spider/deploy")
 def spider_deploy(project_id):
     project = Project.find_project_by_id(project_id)
     return render_template("spider_deploy.html")
 
 
-@app.route("/project/<project_id>/spider/upload", methods=['post'])
+@app.route("/project/<int:project_id>/spider/upload", methods=['post'])
 def spider_egg_upload(project_id):
     project = Project.find_project_by_id(project_id)
     if 'file' not in request.files:
@@ -381,14 +383,14 @@ def spider_egg_upload(project_id):
     return redirect(request.referrer)
 
 
-@app.route("/project/<project_id>/project/stats")
+@app.route("/project/<int:project_id>/project/stats")
 def project_stats(project_id):
     project = Project.find_project_by_id(project_id)
     run_stats = JobExecution.list_run_stats_by_hours(project_id)
     return render_template("project_stats.html", run_stats=run_stats)
 
 
-@app.route("/project/<project_id>/server/stats")
+@app.route("/project/<int:project_id>/server/stats")
 def service_stats(project_id):
     project = Project.find_project_by_id(project_id)
     run_stats = JobExecution.list_run_stats_by_hours(project_id)
